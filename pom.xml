@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.help.wanted.project</groupId>
-	<artifactId>authorization</artifactId>
+	<artifactId>help-wanted-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>authorization</name>
+	<name>help-wanted-app</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
