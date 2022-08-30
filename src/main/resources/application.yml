@@ -12,3 +12,23 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+
+  mail:
+      protocol: ////
+      host: ////
+      port: ////
+      username: ////
+      password: ////
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+
+  main:
+    allow-bean-definition-overriding: true
+
+app:
+  token:
+    enabled: false

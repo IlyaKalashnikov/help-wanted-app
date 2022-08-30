@@ -7,8 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.help.wanted.project.model.AppUser;
-import ru.help.wanted.project.model.Role;
+import ru.help.wanted.project.model.entity.AppUser;
+import ru.help.wanted.project.model.entity.Role;
 import ru.help.wanted.project.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class RefreshTokenUtil {
                 String username = decodedToken.getSubject();
                 AppUser user = userService.findUserByUsername(username);
                 String access_token = JWT.create()
-                        .withSubject(user.getUsername())
+                        .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream()

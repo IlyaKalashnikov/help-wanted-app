@@ -2,7 +2,7 @@ package ru.help.wanted.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.help.wanted.project.model.AppUser;
+import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.service.UserService;
 import ru.help.wanted.project.util.RefreshTokenUtil;
 

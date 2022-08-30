@@ -1,7 +1,8 @@
 package ru.help.wanted.project.service;
 
-import ru.help.wanted.project.model.AppUser;
-import ru.help.wanted.project.model.Role;
+import ru.help.wanted.project.model.dto.AppUserDto;
+import ru.help.wanted.project.model.entity.AppUser;
+import ru.help.wanted.project.model.entity.Role;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface UserService {
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
     List<AppUser> getUsers();
+    AppUser registerNewUser(AppUserDto userDto);
+    boolean emailExists(String email);
 }

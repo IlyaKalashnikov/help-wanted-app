@@ -10,8 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.help.wanted.project.model.AppUser;
-import ru.help.wanted.project.model.Role;
+import ru.help.wanted.project.model.dto.AppUserDto;
+import ru.help.wanted.project.model.entity.AppUser;
+import ru.help.wanted.project.model.entity.Role;
 import ru.help.wanted.project.repo.RoleRepository;
 import ru.help.wanted.project.repo.UserRepository;
 
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = userRepository.findByUsername(username);
+        AppUser appUser = userRepository.findByEmail(username);
         if (appUser == null){
             log.info("User {} not found in db", username);
             throw new UsernameNotFoundException("User not found in db");
@@ -41,12 +42,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         appUser.getRoles().forEach(
                 role -> authorities.add(new SimpleGrantedAuthority(role.getName()))
         );
-        return new User(appUser.getUsername(), appUser.getPassword(), authorities);
+        return new User(appUser.getEmail(), appUser.getPassword(), authorities);
     }
 
     @Override
     public AppUser saveUser(AppUser appUser) {
-        log.info("Saving user '{}' to db", appUser.getUsername());
+        log.info("Saving user '{}' to db", appUser.getEmail());
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public AppUser findUserByUsername(String username) {
         log.info("Searching for user with username '{}' in db", username);
-        return userRepository.findByUsername(username);
+        return userRepository.findByEmail(username);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
-        AppUser appUser = userRepository.findByUsername(username);
+        AppUser appUser = userRepository.findByEmail(username);
         Role role = roleRepository.findByRoleName(roleName);
         appUser.getRoles().add(role);
     }
@@ -75,5 +76,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<AppUser> getUsers() {
         log.info("Getting all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public AppUser registerNewUser(AppUserDto userDto) {
+        log.info("Checking for email {} to be present in db", userDto.getEmail());
+        if (emailExists(userDto.getEmail())) {
+            throw new UsernameNotFoundException("There is an account with that email address: "
+                    + userDto.getEmail());
+        }
+        AppUser appUser = AppUser.builder()
+                .id(null)
+                .name(userDto.getFirstName())
+                .secondName(userDto.getLastName())
+                .password(userDto.getPassword())
+                .email(userDto.getEmail())
+                .roles(new ArrayList<>())
+                .build();
+        saveUser(appUser);
+        addRoleToUser(appUser.getEmail(), "ROLE_USER");
+
+        return appUser;
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
 }

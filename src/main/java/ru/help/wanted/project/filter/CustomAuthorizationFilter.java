@@ -43,7 +43,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         Если пользователь хочет авторизоваться, фильтр не проверяет JWT,
         а просто передает запрос дальше по цепочке фильтров
         */
-        if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh/**")) {
+        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/registration")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
