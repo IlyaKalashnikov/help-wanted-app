@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.help.wanted.project.model.entity.AppUser;
+import ru.help.wanted.project.repo.UserRepository;
 import ru.help.wanted.project.util.SecureRandomBytesGenerator;
 
 import javax.servlet.FilterChain;
@@ -31,6 +34,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager;
     private final SecureRandomBytesGenerator randomBytesGenerator;
+    private final UserRepository userRepository;
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -38,6 +43,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String password = request.getParameter("password");
         log.info("Email is {}", email);
         log.info("Password is {}", password);
+        if (!userRepository.findByEmail(email).isEnabled()){
+            throw new DisabledException("User account is disabled");
+        }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(token);
     }

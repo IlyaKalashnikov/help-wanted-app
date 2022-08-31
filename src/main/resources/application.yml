@@ -14,17 +14,18 @@ spring:
     show-sql: true
 
   mail:
-      protocol: ////
-      host: ////
-      port: ////
-      username: ////
-      password: ////
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
+    host: smtp.yandex.ru
+    port: 465
+    username: kalashilya@yandex.ru
+    password: atvlyjgtdacvvqut
+    transport:
+      protocol: smtp
+    smtp:
+      auth: true
+      starttls:
+        enable: true
+    from:
+      email: kalashnikov.ie97@gmail.com
 
   main:
     allow-bean-definition-overriding: true
@@ -32,3 +33,9 @@ spring:
 app:
   token:
     enabled: false
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

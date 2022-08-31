@@ -42,7 +42,7 @@ public class RegistrationController {
 
     @GetMapping("/registrationConfirm")
     public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) {
-        final Locale locale = new Locale("en");
+        final Locale locale = request.getLocale();
 
         final EmailVerificationToken verificationToken = emailVerificationService.getVerificationToken(token);
         if (verificationToken == null) {

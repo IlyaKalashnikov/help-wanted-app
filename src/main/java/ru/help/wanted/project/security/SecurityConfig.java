@@ -12,34 +12,41 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.help.wanted.project.filter.CustomAuthenticationFilter;
 import ru.help.wanted.project.filter.CustomAuthorizationFilter;
+import ru.help.wanted.project.repo.UserRepository;
+import ru.help.wanted.project.service.UserServiceImpl;
 import ru.help.wanted.project.util.SecureRandomBytesGenerator;
 
-@Configuration
+//@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserServiceImpl userService;
+//    private final UserDetailsService userDetailsService;
+//    private final PasswordEncoder passwordEncoder;
     private final SecureRandomBytesGenerator secureRandomBytesGenerator;
+    private final UserRepository userRepository;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter authenticationFilter =
-                new CustomAuthenticationFilter(authenticationManagerBean(),secureRandomBytesGenerator);
+                new CustomAuthenticationFilter(authenticationManagerBean(),secureRandomBytesGenerator, userRepository);
         authenticationFilter.setFilterProcessesUrl("/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/user/registration").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/registration").permitAll();
+        http.authorizeRequests().antMatchers("/registrationConfirm*","/badUser*").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/getAds", "/api/token/refresh/**")
                 .permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users")

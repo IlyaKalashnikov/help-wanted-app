@@ -35,9 +35,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (appUser == null){
             log.info("User {} not found in db", username);
             throw new UsernameNotFoundException("User not found in db");
-        } else {
+        } else
             log.info("Found user {} in db", username);
-        }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         appUser.getRoles().forEach(
                 role -> authorities.add(new SimpleGrantedAuthority(role.getName()))
@@ -89,13 +88,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .id(null)
                 .name(userDto.getFirstName())
                 .secondName(userDto.getLastName())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .email(userDto.getEmail())
                 .roles(new ArrayList<>())
+                .enabled(false)
                 .build();
-        saveUser(appUser);
+        userRepository.save(appUser);
         addRoleToUser(appUser.getEmail(), "ROLE_USER");
-
         return appUser;
     }
 

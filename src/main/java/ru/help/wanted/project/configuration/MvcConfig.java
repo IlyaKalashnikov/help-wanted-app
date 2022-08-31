@@ -100,16 +100,15 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("HOST");
-        mailSender.setPort(000);
+        mailSender.setHost("smtp.yandex.ru");
+        mailSender.setPort(465);
 
-        mailSender.setUsername("USERNAME");
-        mailSender.setPassword("PASSWORD");
+        mailSender.setUsername("kalashilya@yandex.ru");
+        mailSender.setPassword("atvlyjgtdacvvqut");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
         props.put("mail.smtp.ssl.enable", "true");
 
