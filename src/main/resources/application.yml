@@ -16,16 +16,15 @@ spring:
   mail:
     host: smtp.yandex.ru
     port: 465
-    username: kalashilya@yandex.ru
-    password: atvlyjgtdacvvqut
+    username: i.e.kalashnikov@yandex.ru
+    password: zwvxwrvtarinmdzf
     transport:
       protocol: smtp
-    smtp:
-      auth: true
-      starttls:
-        enable: true
-    from:
-      email: kalashnikov.ie97@gmail.com
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+
 
   main:
     allow-bean-definition-overriding: true

@@ -2,14 +2,9 @@ package ru.help.wanted.project.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.help.wanted.project.model.dto.AppUserDto;
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.entity.Role;
@@ -17,32 +12,15 @@ import ru.help.wanted.project.repo.RoleRepository;
 import ru.help.wanted.project.repo.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
 @Service
-@RequiredArgsConstructor
-@Transactional
 @Slf4j
-public class UserServiceImpl implements UserService, UserDetailsService {
-
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = userRepository.findByEmail(username);
-        if (appUser == null){
-            log.info("User {} not found in db", username);
-            throw new UsernameNotFoundException("User not found in db");
-        } else
-            log.info("Found user {} in db", username);
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        appUser.getRoles().forEach(
-                role -> authorities.add(new SimpleGrantedAuthority(role.getName()))
-        );
-        return new User(appUser.getEmail(), appUser.getPassword(), authorities);
-    }
+    private final RoleRepository roleRepository;
 
     @Override
     public AppUser saveUser(AppUser appUser) {
@@ -91,11 +69,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .email(userDto.getEmail())
                 .roles(new ArrayList<>())
-                .enabled(false)
+                //ИСПРАВИТЬ!!!!!!!!!!!
+                .enabled(true)
                 .build();
-        userRepository.save(appUser);
-        addRoleToUser(appUser.getEmail(), "ROLE_USER");
-        return appUser;
+        return userRepository.save(appUser);
     }
 
     @Override

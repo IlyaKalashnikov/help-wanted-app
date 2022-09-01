@@ -103,8 +103,8 @@ public class MvcConfig implements WebMvcConfigurer {
         mailSender.setHost("smtp.yandex.ru");
         mailSender.setPort(465);
 
-        mailSender.setUsername("kalashilya@yandex.ru");
-        mailSender.setPassword("atvlyjgtdacvvqut");
+        mailSender.setUsername("i.e.kalashnikov@yandex.ru");
+        mailSender.setPassword("zwvxwrvtarinmdzf");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

@@ -15,17 +15,17 @@ import java.util.*;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserService UserService;
     private final RefreshTokenUtil refreshTokenUtil;
 
     @GetMapping("/users")
     public List<AppUser> getUsers() {
-        return userService.getUsers();
+        return UserService.getUsers();
     }
 
     @PostMapping("/user/save")
     public AppUser saveUser(@RequestBody AppUser user) {
-        return userService.saveUser(user);
+        return UserService.saveUser(user);
     }
 
     @GetMapping("/token/refresh")

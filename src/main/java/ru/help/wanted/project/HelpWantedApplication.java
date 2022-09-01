@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.entity.Role;
-import ru.help.wanted.project.repo.VerificationTokenRepo;
+import ru.help.wanted.project.repo.UserRepository;
 import ru.help.wanted.project.service.UserService;
 
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ public class HelpWantedApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunnerBean(UserService userService) {
+    public CommandLineRunner commandLineRunnerBean(UserService UserService, UserRepository userRepository) {
         return args -> {
-            userService.saveRole(new Role(null, "ROLE_ADMIN"));
-            userService.saveRole(new Role(null, "ROLE_USER"));
+            UserService.saveRole(new Role(null, "ROLE_ADMIN"));
+            UserService.saveRole(new Role(null, "ROLE_USER"));
 
-            userService.saveUser(new AppUser
+            UserService.saveUser(new AppUser
                     (null, "Ilya", "iluha", "753476Kk", "kalashilya@yandex.ru", true, new ArrayList<>()));
-            userService.saveUser(AppUser.builder()
+            UserService.saveUser(AppUser.builder()
                     .id(null)
                     .name("Iluha")
                     .secondName("EbalSecurity")
@@ -36,8 +36,8 @@ public class HelpWantedApplication {
                     .roles(new ArrayList<>())
                     .build());
 
-            userService.addRoleToUser("neebet@mail.ru","ROLE_USER");
-            userService.addRoleToUser("kalashilya@yandex.ru", "ROLE_ADMIN");
+            UserService.addRoleToUser("neebet@mail.ru","ROLE_USER");
+            UserService.addRoleToUser("kalashilya@yandex.ru", "ROLE_ADMIN");
         };
     }
 

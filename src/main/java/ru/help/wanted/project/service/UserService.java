@@ -7,6 +7,7 @@ import ru.help.wanted.project.model.entity.Role;
 import java.util.List;
 
 public interface UserService {
+
     AppUser saveUser(AppUser appUser);
     AppUser findUserByUsername(String username);
     Role saveRole(Role role);

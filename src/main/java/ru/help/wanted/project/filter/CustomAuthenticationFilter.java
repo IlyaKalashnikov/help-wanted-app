@@ -13,7 +13,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.repo.UserRepository;
 import ru.help.wanted.project.util.SecureRandomBytesGenerator;
 
@@ -27,11 +26,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authenticationManager;
     private final SecureRandomBytesGenerator randomBytesGenerator;
     private final UserRepository userRepository;
@@ -43,9 +40,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String password = request.getParameter("password");
         log.info("Email is {}", email);
         log.info("Password is {}", password);
-        if (!userRepository.findByEmail(email).isEnabled()){
-            throw new DisabledException("User account is disabled");
-        }
+//        if (!userRepository.findByEmail(email).isEnabled()) {
+//            throw new DisabledException("User account is disabled");
+//        }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(token);
     }

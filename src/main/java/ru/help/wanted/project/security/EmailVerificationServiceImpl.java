@@ -1,4 +1,4 @@
-package ru.help.wanted.project.service;
+package ru.help.wanted.project.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

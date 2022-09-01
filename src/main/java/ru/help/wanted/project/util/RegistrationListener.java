@@ -1,6 +1,5 @@
 package ru.help.wanted.project.util;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
@@ -8,7 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import ru.help.wanted.project.model.entity.AppUser;
-import ru.help.wanted.project.service.EmailVerificationService;
+import ru.help.wanted.project.security.EmailVerificationService;
 
 import java.util.UUID;
 
@@ -38,7 +37,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String message = messages.getMessage("message.regSucc", null, event.getLocale());
 
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom("kalashilya@yandex.ru");
+        email.setFrom("i.e.kalashnikov@yandex.ru");
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message + "\r\n" + confirmationUrl);

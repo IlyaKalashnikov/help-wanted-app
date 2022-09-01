@@ -1,4 +1,4 @@
-package ru.help.wanted.project.service;
+package ru.help.wanted.project.security;
 
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.token.EmailVerificationToken;

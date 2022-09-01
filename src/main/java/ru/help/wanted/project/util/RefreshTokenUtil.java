@@ -27,7 +27,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class RefreshTokenUtil {
     private final SecureRandomBytesGenerator randomBytesGenerator;
-    private final UserService userService;
+    private final UserService UserService;
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -38,7 +38,7 @@ public class RefreshTokenUtil {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedToken = verifier.verify(refresh_token);
                 String username = decodedToken.getSubject();
-                AppUser user = userService.findUserByUsername(username);
+                AppUser user = UserService.findUserByUsername(username);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
