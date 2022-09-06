@@ -114,6 +114,4 @@ public class MvcConfig implements WebMvcConfigurer {
 
         return mailSender;
     }
-
-
 }

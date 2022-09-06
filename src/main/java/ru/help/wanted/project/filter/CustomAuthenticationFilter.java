@@ -40,9 +40,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String password = request.getParameter("password");
         log.info("Email is {}", email);
         log.info("Password is {}", password);
-//        if (!userRepository.findByEmail(email).isEnabled()) {
-//            throw new DisabledException("User account is disabled");
-//        }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(token);
     }

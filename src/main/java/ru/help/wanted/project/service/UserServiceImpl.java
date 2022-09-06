@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.help.wanted.project.error.UserAlreadyExistException;
 import ru.help.wanted.project.model.dto.AppUserDto;
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.entity.Role;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public AppUser registerNewUser(AppUserDto userDto) {
         log.info("Checking for email {} to be present in db", userDto.getEmail());
         if (emailExists(userDto.getEmail())) {
-            throw new UsernameNotFoundException("There is an account with that email address: "
+            throw new UserAlreadyExistException("There is an account with that email address: "
                     + userDto.getEmail());
         }
         AppUser appUser = AppUser.builder()
@@ -69,8 +70,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .email(userDto.getEmail())
                 .roles(new ArrayList<>())
-                //ИСПРАВИТЬ!!!!!!!!!!!
-                .enabled(true)
+                .enabled(false)
                 .build();
         return userRepository.save(appUser);
     }

@@ -66,25 +66,4 @@ public class RegistrationController {
         model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
         return "redirect:/login.html?lang=" + locale.getLanguage();
     }
-
-    @PostMapping("/user/registration")
-    public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid final AppUserDto userDto, final HttpServletRequest request, final Errors errors) {
-        log.info("Started POST-requested method of registration \n user account information: {}", userDto.getEmail());
-        try {
-            AppUser registered = userService.registerNewUser(userDto);
-            userService.addRoleToUser(userDto.getEmail(), "ROLE_USER");
-
-            final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
-        } catch (final UserAlreadyExistException uaeEx) {
-            ModelAndView mav = new ModelAndView("registration", "user", userDto);
-            String errMessage = messages.getMessage("message.regError", null, request.getLocale());
-            mav.addObject("message", errMessage);
-            return mav;
-        } catch (final RuntimeException ex) {
-            return new ModelAndView("emailError", "user", userDto);
-        }
-        return new ModelAndView("successRegister", "user", userDto);
-    }
-
 }
