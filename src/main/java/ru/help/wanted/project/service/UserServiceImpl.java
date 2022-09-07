@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.help.wanted.project.error.UserAlreadyExistException;
 import ru.help.wanted.project.model.dto.AppUserDto;
 import ru.help.wanted.project.model.entity.AppUser;
@@ -15,6 +16,7 @@ import ru.help.wanted.project.repo.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -86,5 +88,17 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(AppUser user, String token) {
         PasswordResetToken resetToken = new PasswordResetToken(token, user);
         passwordResetTokenRepo.save(resetToken);
+    }
+
+    @Override
+    public Optional getUserByPasswordResetToken(String token) {
+        return Optional.ofNullable(passwordResetTokenRepo.findByToken(token).getAppUser());
+    }
+
+    @Override
+    @Transactional
+    public void changeUserPassword(AppUser appUser, String newPassword) {
+        AppUser user = userRepository.findByEmail(appUser.getEmail());
+        user.setPassword(passwordEncoder.encode(newPassword));
     }
 }

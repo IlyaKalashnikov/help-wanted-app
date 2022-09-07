@@ -10,9 +10,10 @@ import ru.help.wanted.project.model.token.PasswordResetToken;
 @Repository
 public interface PasswordResetTokenRepo extends JpaRepository<PasswordResetToken, Long> {
 
-    @Query("SELECT t FROM PasswordResetToken t WHERE t.app_user = :user")
+    @Query("SELECT t FROM PasswordResetToken t WHERE t.appUser = :user")
     PasswordResetToken findByUser(@Param("user")AppUser user);
 
     @Query("SELECT t FROM PasswordResetToken t WHERE t.token = :token")
     PasswordResetToken findByToken(@Param("token")String token);
+
 }

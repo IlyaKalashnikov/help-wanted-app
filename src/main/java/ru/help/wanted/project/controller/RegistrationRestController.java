@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.help.wanted.project.error.UserAlreadyExistException;
 import ru.help.wanted.project.error.UserNotFoundException;
 import ru.help.wanted.project.model.dto.AppUserDto;
+import ru.help.wanted.project.model.dto.PasswordDto;
 import ru.help.wanted.project.model.entity.AppUser;
+import ru.help.wanted.project.service.UserSecurityService;
 import ru.help.wanted.project.service.UserService;
 import ru.help.wanted.project.util.GenericResponse;
 import ru.help.wanted.project.util.OnRegistrationCompleteEvent;
@@ -18,6 +20,8 @@ import ru.help.wanted.project.util.OnResetPasswordEvent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ import javax.validation.Valid;
 public class RegistrationRestController {
     private final UserService userService;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserSecurityService userSecurityService;
 
     private final MessageSource messages;
 
@@ -52,5 +57,26 @@ public class RegistrationRestController {
         return new GenericResponse(
                 messages.getMessage("message.resetPasswordEmail", null,
                         request.getLocale()));
+    }
+
+    @PostMapping("/user/savePassword")
+    public GenericResponse savePassword(final Locale locale, PasswordDto passwordDto) {
+
+        String result = userSecurityService.validatePasswordResetToken(passwordDto.getToken());
+
+        if(result != null) {
+            return new GenericResponse(messages.getMessage(
+                    "auth.message." + result, null, locale));
+        }
+
+        Optional<AppUser> user = userService.getUserByPasswordResetToken(passwordDto.getToken());
+        if(user.isPresent()) {
+            userService.changeUserPassword(user.get(), passwordDto.getNewPassword());
+            return new GenericResponse(messages.getMessage(
+                    "message.resetPasswordSuc", null, locale));
+        } else {
+            return new GenericResponse(messages.getMessage(
+                    "auth.message.invalid", null, locale));
+        }
     }
 }

@@ -5,6 +5,7 @@ import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.entity.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -16,4 +17,6 @@ public interface UserService {
     AppUser registerNewUser(AppUserDto userDto);
     boolean emailExists(String email);
     void createPasswordResetTokenForUser(final AppUser user, final String token);
+    Optional<AppUser> getUserByPasswordResetToken(String token);
+    void changeUserPassword(AppUser appUser, String newPassword);
 }

@@ -1,7 +1,6 @@
 package ru.help.wanted.project.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/user/registration*","/registrationConfirm*",
                         "/badUser*", "/successRegister*", "/user/resetPassword*", "/forgetPassword*",
-                        "/user/changePassword*", "/updatePassword*")
+                        "/user/changePassword*", "/updatePassword*", "/user/savePassword*")
                 .permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/getAds", "/api/token/refresh/**")
                 .permitAll();
