@@ -38,7 +38,7 @@ public class RefreshTokenUtil {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedToken = verifier.verify(refresh_token);
                 String username = decodedToken.getSubject();
-                AppUser user = UserService.findUserByUsername(username);
+                AppUser user = UserService.findUserByEmail(username);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))

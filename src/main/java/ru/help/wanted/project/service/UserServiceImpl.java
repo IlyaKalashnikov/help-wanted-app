@@ -2,13 +2,14 @@ package ru.help.wanted.project.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.help.wanted.project.error.UserAlreadyExistException;
 import ru.help.wanted.project.model.dto.AppUserDto;
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.entity.Role;
+import ru.help.wanted.project.model.token.PasswordResetToken;
+import ru.help.wanted.project.repo.PasswordResetTokenRepo;
 import ru.help.wanted.project.repo.RoleRepository;
 import ru.help.wanted.project.repo.UserRepository;
 
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final PasswordResetTokenRepo passwordResetTokenRepo;
 
     @Override
     public AppUser saveUser(AppUser appUser) {
@@ -31,9 +33,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppUser findUserByUsername(String username) {
-        log.info("Searching for user with username '{}' in db", username);
-        return userRepository.findByEmail(username);
+    public AppUser findUserByEmail(String email) {
+        log.info("Searching for user with username '{}' in db", email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -78,5 +80,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean emailExists(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(AppUser user, String token) {
+        PasswordResetToken resetToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepo.save(resetToken);
     }
 }

@@ -26,17 +26,6 @@ public class HelpWantedApplication {
 
             UserService.saveUser(new AppUser
                     (null, "Ilya", "iluha", "753476Kk", "kalashilya@yandex.ru", true, new ArrayList<>()));
-            UserService.saveUser(AppUser.builder()
-                    .id(null)
-                    .name("Iluha")
-                    .secondName("EbalSecurity")
-                    .password("123")
-                    .email("neebet@mail.ru")
-                    .enabled(true)
-                    .roles(new ArrayList<>())
-                    .build());
-
-            UserService.addRoleToUser("neebet@mail.ru","ROLE_USER");
             UserService.addRoleToUser("kalashilya@yandex.ru", "ROLE_ADMIN");
         };
     }

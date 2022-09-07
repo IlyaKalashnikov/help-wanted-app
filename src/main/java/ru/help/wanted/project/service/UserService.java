@@ -9,10 +9,11 @@ import java.util.List;
 public interface UserService {
 
     AppUser saveUser(AppUser appUser);
-    AppUser findUserByUsername(String username);
+    AppUser findUserByEmail(String email);
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
     List<AppUser> getUsers();
     AppUser registerNewUser(AppUserDto userDto);
     boolean emailExists(String email);
+    void createPasswordResetTokenForUser(final AppUser user, final String token);
 }

@@ -7,20 +7,16 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import ru.help.wanted.project.error.UserAlreadyExistException;
 import ru.help.wanted.project.model.dto.AppUserDto;
 import ru.help.wanted.project.model.entity.AppUser;
 import ru.help.wanted.project.model.token.EmailVerificationToken;
 import ru.help.wanted.project.repo.UserRepository;
 import ru.help.wanted.project.security.EmailVerificationService;
+import ru.help.wanted.project.service.UserSecurityService;
 import ru.help.wanted.project.service.UserService;
-import ru.help.wanted.project.util.OnRegistrationCompleteEvent;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -33,6 +29,7 @@ public class RegistrationController {
     private final UserService userService;
     private final MessageSource messages;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserSecurityService userSecurityService;
     private final UserRepository userRepository;
 
     @GetMapping("/user/registration")
@@ -65,5 +62,19 @@ public class RegistrationController {
         user.setEnabled(true);
         model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
         return "redirect:/login.html?lang=" + locale.getLanguage();
+    }
+
+    @GetMapping("/user/changePassword")
+    public String showChangePasswordPage(Locale locale, Model model,
+                                         @RequestParam("token") String token) {
+        String result = userSecurityService.validatePasswordResetToken(token);
+        if(result != null) {
+            String message = messages.getMessage("auth.message." + result, null, locale);
+            return "redirect:/login.html?lang="
+                    + locale.getLanguage() + "&message=" + message;
+        } else {
+            model.addAttribute("token", token);
+            return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
+        }
     }
 }
