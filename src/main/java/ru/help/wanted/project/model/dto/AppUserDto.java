@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.help.wanted.project.validation.PasswordMatches;
 import ru.help.wanted.project.validation.ValidEmail;
+import ru.help.wanted.project.validation.ValidPassword;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class AppUserDto {
     @NotNull
     @NotEmpty
     private String email;
+    @ValidPassword
     @NotNull
     @NotEmpty
     private String password;

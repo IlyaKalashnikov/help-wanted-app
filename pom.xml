@@ -71,6 +71,16 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.passay</groupId>
+			<artifactId>passay</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r05</version>
+		</dependency>
 	</dependencies>
 
 	<build>
