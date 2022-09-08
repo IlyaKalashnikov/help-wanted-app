@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/authorization_service
-    username: postgres
-    password: 12345
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,8 +16,8 @@ spring:
   mail:
     host: smtp.yandex.ru
     port: 465
-    username: i.e.kalashnikov@yandex.ru
-    password: zwvxwrvtarinmdzf
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
     transport:
       protocol: smtp
       smtp:
