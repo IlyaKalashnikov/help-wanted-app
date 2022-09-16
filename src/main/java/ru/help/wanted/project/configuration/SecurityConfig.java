@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter authenticationFilter =
-                new CustomAuthenticationFilter(authenticationManagerBean(), secureRandomBytesGenerator, userRepository);
+                new CustomAuthenticationFilter(authenticationManagerBean(), secureRandomBytesGenerator);
 //        authenticationFilter.setFilterProcessesUrl("/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

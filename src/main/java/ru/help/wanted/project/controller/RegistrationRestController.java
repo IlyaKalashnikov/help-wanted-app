@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,7 +61,7 @@ public class RegistrationRestController {
     }
 
     @PostMapping("/user/savePassword")
-    public GenericResponse savePassword(final Locale locale, PasswordDto passwordDto) {
+    public GenericResponse savePassword(final Locale locale,@Valid PasswordDto passwordDto) {
 
         String result = userSecurityService.validatePasswordResetToken(passwordDto.getToken());
 

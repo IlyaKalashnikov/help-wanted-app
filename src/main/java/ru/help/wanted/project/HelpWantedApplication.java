@@ -25,7 +25,7 @@ public class HelpWantedApplication {
             UserService.saveRole(new Role(null, "ROLE_USER"));
 
             UserService.saveUser(new AppUser
-                    (null, "Ilya", "iluha", "753476Kk", "kalashilya@yandex.ru", true, new ArrayList<>()));
+                    (null, "Ilya", "Kalashnikov", "753476Kk", "kalashilya@yandex.ru", true, new ArrayList<>()));
             UserService.addRoleToUser("kalashilya@yandex.ru", "ROLE_ADMIN");
         };
     }

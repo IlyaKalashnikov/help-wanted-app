@@ -14,6 +14,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import ru.help.wanted.project.validation.EmailValidator;
@@ -59,6 +60,18 @@ public class MvcConfig implements WebMvcConfigurer {
         return bean;
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        registry.addInterceptor(localeChangeInterceptor);
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        return cookieLocaleResolver;
+    }
     @Bean
     public EmailValidator usernameValidator() {
         return new EmailValidator();
@@ -67,14 +80,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public PasswordMatchesValidator passwordMatchesValidator() {
         return new PasswordMatchesValidator();
-    }
-
-    @Bean
-    public LocaleResolver localeResolver() {
-        final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        Locale locale = new Locale("ru");
-        cookieLocaleResolver.setDefaultLocale(locale);
-        return cookieLocaleResolver;
     }
 
     @Bean
